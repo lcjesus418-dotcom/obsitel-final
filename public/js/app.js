@@ -3,6 +3,7 @@
    MongoDB + Google Forms + Viñeta NC + Autenticación
    ════════════════════════════════════════════════════════ */
 
+const API = 'https://obsitel-descuento.onrender.com/api';
 
 // Configuración Google Forms
 const GOOGLE_FORMS = {
