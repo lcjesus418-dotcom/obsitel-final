@@ -1,4 +1,3 @@
-/* ── Reset & Base ─────────────────────────────────────── */
 * { box-sizing: border-box; }
 
 body {
@@ -7,104 +6,6 @@ body {
   display: flex;
   font-size: 15px;
   background: #f1f5f9;
-}
-
-/* ── Auth Screen ──────────────────────────────────────── */
-.auth-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.auth-box {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 380px;
-}
-
-.auth-box h1 {
-  text-align: center;
-  margin: 0 0 30px 0;
-  color: #1e293b;
-  font-size: 28px;
-}
-
-.auth-tab {
-  display: none;
-}
-
-.auth-tab.activo {
-  display: block;
-}
-
-.auth-tab h2 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
-  color: #1e293b;
-}
-
-.auth-tab input {
-  width: 100%;
-  padding: 11px;
-  margin: 8px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-.auth-tab input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-}
-
-.auth-btn {
-  width: 100%;
-  padding: 11px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 6px;
-  background: #667eea;
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.auth-btn:hover {
-  background: #5568d3;
-}
-
-.auth-toggle {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.auth-toggle a {
-  color: #667eea;
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.auth-toggle a:hover {
-  text-decoration: underline;
-}
-
-.auth-error {
-  color: #dc2626;
-  font-size: 12px;
-  margin-top: 8px;
-  text-align: center;
 }
 
 /* ── Sidebar ──────────────────────────────────────────── */
@@ -154,7 +55,6 @@ body {
   padding: 5px 9px;
   font-size: 18px;
   line-height: 1;
-  transition: all 0.2s;
 }
 .hamburger:hover { background: #334155; }
 
@@ -201,14 +101,11 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-size: 11px;
-  transition: all 0.2s;
 }
 .clear-all:hover { background: #b91c1c; }
 
 /* ── Inputs ───────────────────────────────────────────── */
-input[type="text"],
-input[type="search"],
-textarea {
+input[type="text"], input[type="search"], textarea, select {
   width: 100%;
   padding: 9px 11px;
   margin: 5px 0;
@@ -218,15 +115,12 @@ textarea {
   font-family: inherit;
   transition: all 0.2s;
 }
-input[type="text"]:focus,
-input[type="search"]:focus,
-textarea:focus {
+input[type="text"]:focus, textarea:focus, select:focus {
   outline: none;
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
 }
 
-/* ── Botón Guardar ────────────────────────────────────── */
 button.accion {
   width: 100%;
   padding: 11px;
@@ -241,11 +135,6 @@ button.accion {
   transition: all 0.2s;
 }
 button.accion:hover { background: #1d4ed8; }
-button.accion:active { transform: scale(0.98); }
-button.accion.guardando {
-  background: #16a34a;
-  pointer-events: none;
-}
 
 .historial { margin-top: 12px; }
 
@@ -258,7 +147,6 @@ button.accion.guardando {
   font-size: 14px;
   line-height: 1.6;
   border: 1px solid #e2e8f0;
-  transition: all 0.2s;
 }
 .item:hover { border-color: #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 
@@ -304,7 +192,6 @@ button.accion.guardando {
   padding: 2px 4px;
   border-radius: 4px;
   line-height: 1;
-  transition: all 0.2s;
 }
 .copy:hover   { background: #bfdbfe; }
 .edit:hover   { background: #fef08a; }
@@ -315,9 +202,9 @@ button.accion.guardando {
 
 .item-body { white-space: pre-line; padding: 8px 0; color: #334155; }
 
-/* ── Descripción ──────────────────────────────────────── */
+/* ── Descripción (entre header y link) ────────────────── */
 .item-descripcion {
-  margin: 8px 0;
+  margin: 6px 0;
   padding: 6px 8px;
   border: 1px dashed #cbd5e1;
   border-radius: 4px;
@@ -326,9 +213,9 @@ button.accion.guardando {
   width: 100%;
   font-family: inherit;
   resize: vertical;
-  min-height: 50px;
+  min-height: 36px;
 }
-.item-descripcion:focus { 
+.item-descripcion:focus {
   border-color: #2563eb;
   background: white;
   outline: none;
@@ -361,9 +248,8 @@ button.accion.guardando {
   width: auto;
   margin: 0;
   font-family: monospace;
-  transition: all 0.2s;
 }
-.item-respuesta-input:focus { 
+.item-respuesta-input:focus {
   outline: none;
   border-color: #2563eb;
   background: white;
@@ -394,7 +280,6 @@ button.accion.guardando {
 .item-respuesta-icon.enviado {
   filter: grayscale(0);
   opacity: 1;
-  cursor: default;
 }
 
 /* ── Papelera ─────────────────────────────────────────── */
@@ -411,7 +296,6 @@ button.accion.guardando {
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  transition: all 0.2s;
 }
 .btn-vaciar       { background: #dc2626; color: white; }
 .btn-vaciar:hover { background: #b91c1c; }
@@ -439,11 +323,7 @@ button.accion.guardando {
 }
 .papelera-item-body { flex: 1; white-space: pre-line; }
 .papelera-item-meta { font-size: 11px; color: #b91c1c; margin-bottom: 3px; font-weight: 500; }
-.papelera-item-actions {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
-}
+.papelera-item-actions { display: flex; gap: 4px; flex-shrink: 0; }
 .papelera-btn-restore, .papelera-btn-delete {
   padding: 3px 6px;
   border: none;
@@ -451,7 +331,6 @@ button.accion.guardando {
   cursor: pointer;
   font-size: 11px;
   font-weight: 500;
-  transition: all 0.2s;
 }
 .papelera-btn-restore { background: #d1fae5; color: #059669; }
 .papelera-btn-restore:hover { background: #a7f3d0; }
@@ -465,6 +344,27 @@ button.accion.guardando {
   padding: 20px 0;
 }
 
+/* ── Configuración ─────────────────────────────────────── */
+.config-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 14px;
+  margin-bottom: 2px;
+}
+.config-select {
+  cursor: pointer;
+}
+.config-guardado-msg {
+  text-align: center;
+  color: #059669;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
 /* ── Loader ───────────────────────────────────────────── */
 .loader {
   text-align: center;
@@ -472,19 +372,6 @@ button.accion.guardando {
   font-size: 13px;
   padding: 10px 0;
 }
-
-.spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #e2e8f0;
-  border-top-color: #2563eb;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-right: 6px;
-  vertical-align: middle;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Responsive ───────────────────────────────────────── */
 @media (max-width: 380px) {

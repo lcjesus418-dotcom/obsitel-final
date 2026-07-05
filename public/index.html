@@ -9,191 +9,160 @@
 </head>
 <body>
 
-<!-- ── LOGIN ─────────────────────────────────────────────── -->
-<div id="auth-screen" class="auth-container">
-  <div class="auth-box">
-    <h1>Descuento Obsitel</h1>
-    
-    <!-- Login Tab -->
-    <div id="login-tab" class="auth-tab activo">
-      <h2>Iniciar Sesión</h2>
-      <input type="email" id="login-email" placeholder="Email" required>
-      <input type="password" id="login-password" placeholder="Contraseña" required>
-      <button onclick="login()" class="auth-btn">Entrar</button>
-      <p class="auth-toggle">¿No tienes cuenta? <a onclick="switchTab('register')">Crear una</a></p>
-      <div id="login-error" class="auth-error"></div>
-    </div>
+<!-- Hamburger -->
+<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
 
-    <!-- Registro Tab -->
-    <div id="register-tab" class="auth-tab">
-      <h2>Crear Cuenta</h2>
-      <input type="text" id="register-nombre" placeholder="Tu nombre" required>
-      <input type="email" id="register-email" placeholder="Email" required>
-      <input type="password" id="register-password" placeholder="Contraseña (min. 6 caracteres)" required>
-      <input type="password" id="register-password-confirm" placeholder="Confirmar contraseña" required>
-      <button onclick="register()" class="auth-btn">Crear Cuenta</button>
-      <p class="auth-toggle">¿Ya tienes cuenta? <a onclick="switchTab('login')">Inicia sesión</a></p>
-      <div id="register-error" class="auth-error"></div>
-    </div>
-  </div>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div style="height:38px;"></div>
+  <button class="nav-btn" onclick="ir('obsitel')">Descuentos Obsitel</button>
+  <button class="nav-btn" onclick="ir('tienda')">Venta tienda</button>
+  <button class="nav-btn" onclick="ir('delivery')">Venta delivery</button>
+  <button class="nav-btn" onclick="ir('configuracion')">⚙ Configuración</button>
+  <div style="flex:1;"></div>
+  <button class="nav-btn papelera-btn" onclick="ir('papelera')">🗑 Papelera</button>
 </div>
 
-<!-- ── APP ───────────────────────────────────────────────── -->
-<div id="app-screen" style="display:none;">
+<!-- Main -->
+<div class="main">
 
-  <!-- Hamburger -->
-  <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+  <!-- OBSITEL -->
+  <div id="obsitel" class="seccion activo">
+    <div class="container">
+      <button class="clear-all" onclick="borrarTodo('obsitel')">Borrar Historial</button>
+      <h2>Descuento Obsitel</h2>
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
-    <div style="height:38px;"></div>
-    <button class="nav-btn" onclick="ir('obsitel')">Descuentos Obsitel</button>
-    <button class="nav-btn" onclick="ir('tienda')">Venta tienda</button>
-    <button class="nav-btn" onclick="ir('delivery')">Venta delivery</button>
-    <div style="flex:1;"></div>
-    <div style="padding:10px;border-top:1px solid #475569;">
-      <p style="margin:0 0 8px 0;font-size:12px;color:#94a3b8;" id="user-name"></p>
-      <button class="nav-btn" onclick="ir('papelera')">🗑 Papelera</button>
-      <button class="nav-btn" style="background:#991b1b;margin-top:10px;" onclick="logout()">Salir</button>
+      <input type="text" id="link" placeholder="Link" required>
+
+      <input list="modalidades_list" id="modalidad" placeholder="Modalidad de ajuste" oninput="toggleRecibo()" required>
+      <datalist id="modalidades_list">
+        <option value="NC">
+        <option value="OCC">
+        <option value="DEVOLUCIÓN DE SALDO">
+      </datalist>
+
+      <input type="text" id="entel" placeholder="Numero Entel" required>
+      <input type="text" id="llamada" placeholder="Numero desde el cual llama el cliente" required>
+
+      <input list="motivo_list" id="motivo" placeholder="Motivo / Concepto" required>
+      <datalist id="motivo_list">
+        <option value="VAS">
+        <option value="RECONEXION">
+        <option value="PRORRATEO">
+        <option value="DESCUENTO RETENCION">
+        <option value="DESCUENTO LINEA ADICIONAL">
+        <option value="DESCUENTO PORTABILIDAD">
+        <option value="RECARGA X RECIBO">
+        <option value="RECARGA X BOLSA">
+        <option value="CARGO ADICIONALES">
+        <option value="RECARGA">
+      </datalist>
+
+      <input type="text" id="monto" placeholder="Monto de ajuste" required>
+
+      <input type="text" id="recibo_nc" placeholder="Recibo relacionado (S002-XXXXX)" required>
+
+      <input list="recibo_occ_list" id="recibo_occ" placeholder="Recibo relacionado" style="display:none;">
+      <datalist id="recibo_occ_list">
+        <option value="Proximo recibo">
+        <option value="Proximos 3 recibos">
+        <option value="Proximos 6 recibos">
+        <option value="Proximos 12 recibos">
+      </datalist>
+
+      <input type="text" id="periodo" placeholder="Periodo de facturacion" required>
+
+      <button class="accion" onclick="guardarObsitel()">Guardar</button>
+      <div class="historial" id="hist_obsitel"></div>
     </div>
   </div>
 
-  <!-- Main -->
-  <div class="main">
+  <!-- VENTA TIENDA -->
+  <div id="tienda" class="seccion">
+    <div class="container">
+      <button class="clear-all" onclick="borrarTodo('tienda')">Borrar Historial</button>
+      <h2>Venta Tienda</h2>
 
-    <!-- OBSITEL -->
-    <div id="obsitel" class="seccion activo">
-      <div class="container">
-        <button class="clear-all" onclick="borrarTodo('obsitel')">Borrar Historial</button>
-        <h2>Descuento Obsitel</h2>
+      <input type="text" id="t_link" placeholder="Link" required>
 
-        <input type="text" id="link" placeholder="Link" required>
+      <input list="pickup_list" id="t_pickup" placeholder="PICK UP" required>
+      <datalist id="pickup_list">
+        <option value="renovep">
+        <option value="renocontado">
+      </datalist>
 
-        <input list="modalidades_list" id="modalidad"
-               placeholder="Modalidad de ajuste"
-               oninput="toggleRecibo()" required>
-        <datalist id="modalidades_list">
-          <option value="NC">
-          <option value="OCC">
-          <option value="DEVOLUCIÓN DE SALDO">
-        </datalist>
+      <input type="text" id="t_nombre" placeholder="Nombre" required>
+      <input type="text" id="t_dni" placeholder="DNI" required>
+      <input type="text" id="t_orden" placeholder="Orden" required>
+      <input type="text" id="t_referencia" placeholder="Numero de referencia" required>
+      <input type="text" id="t_tienda" placeholder="Tienda" required>
+      <input type="text" id="t_pdv" placeholder="PDV" required>
 
-        <input type="text" id="entel" placeholder="Numero Entel" required>
-        <input type="text" id="llamada" placeholder="Numero desde el cual llama el cliente" required>
+      <input list="tipo_venta_list" id="t_tipo_venta" placeholder="Tipo de venta" required>
+      <datalist id="tipo_venta_list">
+        <option value="Renovep">
+        <option value="Renocontado">
+        <option value="Renovep + Linea">
+        <option value="Renocontado + Linea">
+      </datalist>
 
-        <input list="motivo_list" id="motivo" placeholder="Motivo / Concepto" required>
-        <datalist id="motivo_list">
-          <option value="VAS">
-          <option value="RECONEXION">
-          <option value="PRORRATEO">
-          <option value="DESCUENTO RETENCION">
-          <option value="DESCUENTO LINEA ADICIONAL">
-          <option value="DESCUENTO PORTABILIDAD">
-          <option value="RECARGA X RECIBO">
-          <option value="RECARGA X BOLSA">
-          <option value="CARGO ADICIONALES">
-          <option value="RECARGA">
-        </datalist>
+      <input type="text" id="t_fecha" placeholder="Fecha y hora que se acercara a la tienda" required>
+      <input type="text" id="t_equipo" placeholder="Equipo" required>
 
-        <input type="text" id="monto" placeholder="Monto de ajuste" required>
-
-        <input type="text" id="recibo_nc"
-               placeholder="Recibo relacionado (S002-XXXXX)" required>
-
-        <input list="recibo_occ_list" id="recibo_occ"
-               placeholder="Recibo relacionado" style="display:none;">
-        <datalist id="recibo_occ_list">
-          <option value="Proximo recibo">
-          <option value="Proximos 3 recibos">
-          <option value="Proximos 6 recibos">
-          <option value="Proximos 12 recibos">
-        </datalist>
-
-        <input type="text" id="periodo" placeholder="Periodo de facturacion" required>
-
-        <button class="accion" onclick="guardarObsitel()">Guardar</button>
-        <div class="historial" id="hist_obsitel"></div>
-      </div>
+      <button class="accion" onclick="guardarTienda()">Guardar</button>
+      <div class="historial" id="hist_tienda"></div>
     </div>
+  </div>
 
-    <!-- VENTA TIENDA -->
-    <div id="tienda" class="seccion">
-      <div class="container">
-        <button class="clear-all" onclick="borrarTodo('tienda')">Borrar Historial</button>
-        <h2>Venta Tienda</h2>
+  <!-- VENTA DELIVERY -->
+  <div id="delivery" class="seccion">
+    <div class="container">
+      <button class="clear-all" onclick="borrarTodo('delivery')">Borrar Historial</button>
+      <h2>Venta Delivery</h2>
 
-        <input type="text" id="t_link" placeholder="Link" required>
+      <input type="text" id="d_link" placeholder="Link" required>
+      <input type="text" id="d_direccion" placeholder="Direccion" required>
+      <input type="text" id="d_ref" placeholder="Referencia direccion" required>
+      <input type="text" id="d_coord" placeholder="Coordenadas" required>
+      <input type="text" id="d_numref" placeholder="Numero de referencia" required>
+      <input type="text" id="d_nombres" placeholder="Nombres completos" required>
+      <input type="text" id="d_dni" placeholder="DNI" required>
+      <input type="text" id="d_orden" placeholder="Orden" required>
+      <input type="text" id="d_tipo" placeholder="Tipo de venta" required>
+      <input type="text" id="d_fecha" placeholder="Fecha de entrega" required>
+      <input type="text" id="d_rango" placeholder="Rango de horario" required>
+      <input type="text" id="d_sku" placeholder="SKU de equipo y accesorio" required>
 
-        <input list="pickup_list" id="t_pickup" placeholder="PICK UP" required>
-        <datalist id="pickup_list">
-          <option value="renovep">
-          <option value="renocontado">
-        </datalist>
-
-        <input type="text" id="t_nombre" placeholder="Nombre" required>
-        <input type="text" id="t_dni" placeholder="DNI" required>
-        <input type="text" id="t_orden" placeholder="Orden" required>
-        <input type="text" id="t_referencia" placeholder="Numero de referencia" required>
-        <input type="text" id="t_tienda" placeholder="Tienda" required>
-        <input type="text" id="t_pdv" placeholder="PDV" required>
-
-        <input list="tipo_venta_list" id="t_tipo_venta" placeholder="Tipo de venta" required>
-        <datalist id="tipo_venta_list">
-          <option value="Renovep">
-          <option value="Renocontado">
-          <option value="Renovep + Linea">
-          <option value="Renocontado + Linea">
-        </datalist>
-
-        <input type="text" id="t_fecha" placeholder="Fecha y hora que se acercara a la tienda" required>
-        <input type="text" id="t_equipo" placeholder="Equipo" required>
-
-        <button class="accion" onclick="guardarTienda()">Guardar</button>
-        <div class="historial" id="hist_tienda"></div>
-      </div>
+      <button class="accion" onclick="guardarDelivery()">Guardar</button>
+      <div class="historial" id="hist_delivery"></div>
     </div>
+  </div>
 
-    <!-- VENTA DELIVERY -->
-    <div id="delivery" class="seccion">
-      <div class="container">
-        <button class="clear-all" onclick="borrarTodo('delivery')">Borrar Historial</button>
-        <h2>Venta Delivery</h2>
-
-        <input type="text" id="d_link" placeholder="Link" required>
-        <input type="text" id="d_direccion" placeholder="Direccion" required>
-        <input type="text" id="d_ref" placeholder="Referencia direccion" required>
-        <input type="text" id="d_coord" placeholder="Coordenadas" required>
-        <input type="text" id="d_numref" placeholder="Numero de referencia" required>
-        <input type="text" id="d_nombres" placeholder="Nombres completos" required>
-        <input type="text" id="d_dni" placeholder="DNI" required>
-        <input type="text" id="d_orden" placeholder="Orden" required>
-        <input type="text" id="d_tipo" placeholder="Tipo de venta" required>
-        <input type="text" id="d_fecha" placeholder="Fecha de entrega" required>
-        <input type="text" id="d_rango" placeholder="Rango de horario" required>
-        <input type="text" id="d_sku" placeholder="SKU de equipo y accesorio" required>
-
-        <button class="accion" onclick="guardarDelivery()">Guardar</button>
-        <div class="historial" id="hist_delivery"></div>
-      </div>
+  <!-- CONFIGURACIÓN -->
+  <div id="configuracion" class="seccion">
+    <div class="container">
+      <h2>⚙ Configuración</h2>
+      <div id="config-form-fields"></div>
     </div>
+  </div>
 
-    <!-- PAPELERA -->
-    <div id="papelera" class="seccion">
-      <div class="container">
-        <h2>🗑 Papelera</h2>
-        <div class="papelera-toolbar">
-          <button class="btn-vaciar" onclick="vaciarPapelera()">Vaciar todo</button>
-          <button class="btn-del-sel" onclick="eliminarSeleccion()">Eliminar seleccionados</button>
-        </div>
-        <div id="hist_papelera"></div>
+  <!-- PAPELERA -->
+  <div id="papelera" class="seccion">
+    <div class="container">
+      <h2>🗑 Papelera</h2>
+      <div class="papelera-toolbar">
+        <button class="btn-vaciar" onclick="vaciarPapelera()">Vaciar todo</button>
+        <button class="btn-del-sel" onclick="eliminarSeleccion()">Eliminar seleccionados</button>
       </div>
+      <div id="hist_papelera"></div>
     </div>
+  </div>
 
-  </div><!-- /.main -->
+</div><!-- /.main -->
 
-</div><!-- /#app-screen -->
-
-<script src="/js/auth.js"></script>
+<script src="/js/formsConfig.js"></script>
+<script src="/js/googleFormsEngine.js"></script>
+<script src="/js/configApp.js"></script>
 <script src="/js/app.js"></script>
 </body>
 </html>
