@@ -6,43 +6,8 @@
   <meta name="description" content="Descuento Obsitel - Sistema de gestión de tickets y vouchers Entel">
   <title>Descuento Obsitel</title>
   <link rel="stylesheet" href="/css/styles.css">
-  <!-- Firebase SDKs Compat -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-
-<!-- ── LOGIN ─────────────────────────────────────────────── -->
-<div id="auth-screen" class="auth-container">
-  <div class="auth-box">
-    <h1>Descuento Obsitel</h1>
-    
-    <!-- Login Tab -->
-    <div id="login-tab" class="auth-tab activo">
-      <h2>Iniciar Sesión</h2>
-      <input type="email" id="login-email" placeholder="Email" required>
-      <input type="password" id="login-password" placeholder="Contraseña" required>
-      <button onclick="login()" class="auth-btn">Entrar</button>
-      <p class="auth-toggle">¿No tienes cuenta? <a onclick="switchTab('register')">Crear una</a></p>
-      <div id="login-error" class="auth-error"></div>
-    </div>
-
-    <!-- Registro Tab -->
-    <div id="register-tab" class="auth-tab">
-      <h2>Crear Cuenta</h2>
-      <input type="text" id="register-nombre" placeholder="Tu nombre" required>
-      <input type="email" id="register-email" placeholder="Email" required>
-      <input type="password" id="register-password" placeholder="Contraseña (min. 6 caracteres)" required>
-      <input type="password" id="register-password-confirm" placeholder="Confirmar contraseña" required>
-      <button onclick="register()" class="auth-btn">Crear Cuenta</button>
-      <p class="auth-toggle">¿Ya tienes cuenta? <a onclick="switchTab('login')">Inicia sesión</a></p>
-      <div id="register-error" class="auth-error"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ── APP SCREEN ────────────────────────────────────────── -->
-<div id="app-screen" style="display:none;">
 
 <datalist id="si_no_list">
   <option value="Sí">
@@ -210,9 +175,7 @@
   </div>
 
 </div><!-- /.main -->
-</div><!-- /#app-screen -->
 
-<script src="/js/auth.js"></script>
 <script src="/js/formsConfig.js"></script>
 <script src="/js/googleFormsEngine.js"></script>
 <script src="/js/configApp.js"></script>

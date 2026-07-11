@@ -407,16 +407,6 @@ button.accion:hover { background: #1d4ed8; }
   z-index: 1000;
 }
 
-.auth-container {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: url('/assets/fondo.png') no-repeat center center;
-  background-size: cover;
-}
-
 .datepicker-content {
   background: white;
   padding: 18px;
@@ -590,94 +580,4 @@ button.accion:hover { background: #1d4ed8; }
 
 @media (min-width: 768px) {
   .container { max-width: 520px; }
-}
-
-/* ── Auth screen extra styles ── */
-.auth-box {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 380px;
-  z-index: 10;
-}
-
-.auth-box h1 {
-  text-align: center;
-  margin: 0 0 30px 0;
-  color: #1e293b;
-  font-size: 28px;
-}
-
-.auth-tab {
-  display: none;
-}
-
-.auth-tab.activo {
-  display: block;
-}
-
-.auth-tab h2 {
-  margin: 0 0 20px 0;
-  font-size: 18px;
-  color: #1e293b;
-}
-
-.auth-tab input {
-  width: 100%;
-  padding: 11px;
-  margin: 8px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-.auth-tab input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-}
-
-.auth-btn {
-  width: 100%;
-  padding: 11px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 6px;
-  background: #667eea;
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.auth-btn:hover {
-  background: #5568d3;
-}
-
-.auth-toggle {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.auth-toggle a {
-  color: #667eea;
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.auth-toggle a:hover {
-  text-decoration: underline;
-}
-
-.auth-error {
-  color: #dc2626;
-  font-size: 12px;
-  margin-top: 8px;
-  text-align: center;
 }

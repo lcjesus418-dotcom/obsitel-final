@@ -303,22 +303,10 @@ async function borrarTodo(seccion) {
 
 /* ── API helper ──────────────────────────────────────────── */
 async function apiFetch(method, path, body) {
-  const token = localStorage.getItem('obsitel_token');
-  const opts = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    }
-  };
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
   if (body) opts.body = JSON.stringify(body);
   try {
     const res = await fetch(`${API}/${path}`, opts);
-    if (res.status === 401 || res.status === 403) {
-      // Token inválido o acceso denegado, cerrar sesión en Firebase (auth.js se encargará del resto)
-      if (window.logout) window.logout();
-      return [];
-    }
     if (!res.ok) { console.error('API error', res.status); return []; }
     return await res.json();
   } catch (err) {
@@ -565,8 +553,6 @@ async function eliminarSeleccion() {
 }
 
 /* ── Init ────────────────────────────────────────────────── */
-window.initApp = function() {
-  renderObsitel();
-  renderTienda();
-  renderDelivery();
-};
+renderObsitel();
+renderTienda();
+renderDelivery();
