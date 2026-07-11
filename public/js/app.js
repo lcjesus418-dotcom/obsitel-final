@@ -57,10 +57,39 @@ function fechaHoraAhora() {
   return `${dd}/${mm}/${now.getFullYear()} ${hh}:${min}`;
 }
 
-/* ── Ícono Google Forms (solo abre/envía, sin campo extra) ─ */
-function crearIconoForms(reg, seccion, voucherParaForm) {
+/* ── Footer Ventas: Accesorio + Promo LLAA + ícono Forms ─── */
+function crearFooterVentas(reg, seccion, voucherParaForm) {
   const wrap = document.createElement('div');
-  wrap.className = 'item-forms-footer';
+  wrap.className = 'item-respuesta item-respuesta-ventas';
+
+  const accInput = document.createElement('input');
+  accInput.type = 'text';
+  accInput.placeholder = 'Accesorio S/1';
+  accInput.className = 'item-respuesta-input item-respuesta-input-corto';
+  accInput.setAttribute('list', 'si_no_list');
+  accInput.value = reg._accesorio || '';
+
+  const promoInput = document.createElement('input');
+  promoInput.type = 'text';
+  promoInput.placeholder = 'Promo LLAA';
+  promoInput.className = 'item-respuesta-input';
+  promoInput.value = reg._promoLLAA || '';
+
+  let debounceAcc, debouncePromo;
+  accInput.addEventListener('input', () => {
+    reg._accesorio = accInput.value.trim();
+    clearTimeout(debounceAcc);
+    debounceAcc = setTimeout(() => {
+      if (reg._id) apiFetch('PUT', `${seccion}/${reg._id}`, { _accesorio: reg._accesorio });
+    }, 800);
+  });
+  promoInput.addEventListener('input', () => {
+    reg._promoLLAA = promoInput.value.trim();
+    clearTimeout(debouncePromo);
+    debouncePromo = setTimeout(() => {
+      if (reg._id) apiFetch('PUT', `${seccion}/${reg._id}`, { _promoLLAA: reg._promoLLAA });
+    }, 800);
+  });
 
   const iconBtn = document.createElement('div');
   iconBtn.className = 'item-respuesta-icon';
@@ -68,13 +97,19 @@ function crearIconoForms(reg, seccion, voucherParaForm) {
   if (reg._formEnviado) iconBtn.classList.add('enviado');
 
   iconBtn.addEventListener('click', () => {
-    const tipoForm = (seccion === 'tienda' || seccion === 'delivery') ? 'ventas' : 'descuentos';
-    enviarAGoogleForms(tipoForm, voucherParaForm(), iconBtn);
+    const voucher = {
+      ...voucherParaForm(),
+      accesorio: accInput.value.trim(),
+      promoLLAA: promoInput.value.trim()
+    };
+    enviarAGoogleForms('ventas', voucher, iconBtn);
     if (reg._id) {
       setTimeout(() => apiFetch('PUT', `${seccion}/${reg._id}`, { _formEnviado: true }), 500);
     }
   });
 
+  wrap.appendChild(accInput);
+  wrap.appendChild(promoInput);
   wrap.appendChild(iconBtn);
   return wrap;
 }
@@ -192,10 +227,10 @@ function crearItem(reg, texto, onDel, onEdit, seccion, voucherParaForm) {
   body.className = 'item-body';
   body.innerText = texto;
 
-  // Descuentos -> viñeta SS + ícono. Tienda/Delivery -> solo ícono.
+  // Descuentos -> viñeta SS + ícono. Tienda/Delivery -> Accesorio + Promo LLAA + ícono.
   const footer = (seccion === 'obsitel')
     ? crearVinetaSS(reg, seccion, voucherParaForm)
-    : crearIconoForms(reg, seccion, voucherParaForm);
+    : crearFooterVentas(reg, seccion, voucherParaForm);
 
   div.appendChild(header);
   div.appendChild(desc);
@@ -346,8 +381,6 @@ function textoTienda(d) {
     'Tipo de venta: ' + (d.tipo_venta || ''),
     'Fecha y hora que se acercara a la tienda: ' + (d.fecha || ''),
     'SKU de equipo, accesorio o SIM: ' + (d.equipo || ''),
-    '¿Se vendió con accesorio a S/1?: ' + (d.accesorio || ''),
-    'Promo del descuento de LLAA: ' + (d.promoLLAA || ''),
     'Canal: S2S - Burns'
   ].join('\n');
 }
@@ -362,9 +395,7 @@ function voucherTienda(d) {
     tipo_venta: d.tipo_venta,
     fecha:      d.fecha,
     horario:    '',
-    sku:        d.equipo,
-    accesorio:  d.accesorio,
-    promoLLAA:  d.promoLLAA
+    sku:        d.equipo
   };
 }
 
@@ -376,11 +407,10 @@ async function guardarTienda() {
     link: v('t_link'), pickup: v('t_pickup'), nombre: v('t_nombre'),
     dni: v('t_dni'), orden: v('t_orden'), referencia: v('t_referencia'),
     tienda: v('t_tienda'), pdv: v('t_pdv'), tipo_venta: v('t_tipo_venta'),
-    fecha: v('t_fecha'), equipo: v('t_equipo'),
-    accesorio: v('t_accesorio'), promoLLAA: v('t_promo_llaa')
+    fecha: v('t_fecha'), equipo: v('t_equipo')
   });
   clr(['t_link','t_pickup','t_nombre','t_dni','t_orden','t_referencia','t_tienda','t_pdv',
-       't_tipo_venta','t_fecha','t_equipo','t_accesorio','t_promo_llaa']);
+       't_tipo_venta','t_fecha','t_equipo']);
   renderTienda();
 }
 
@@ -400,9 +430,7 @@ function textoDelivery(d) {
     'Tipo de venta: ' + (d.tipo || ''),
     'Fecha de entrega: ' + (d.fecha || ''),
     'Rango de horario: ' + (d.rango || ''),
-    'SKU de equipo, accesorio o SIM: ' + (d.sku || ''),
-    '¿Se vendió con accesorio a S/1?: ' + (d.accesorio || ''),
-    'Promo del descuento de LLAA: ' + (d.promoLLAA || '')
+    'SKU de equipo, accesorio o SIM: ' + (d.sku || '')
   ].join('\n');
 }
 
@@ -415,9 +443,7 @@ function voucherDelivery(d) {
     tipo_venta: d.tipo,
     fecha:      d.fecha,
     horario:    d.rango,
-    sku:        d.sku,
-    accesorio:  d.accesorio,
-    promoLLAA:  d.promoLLAA
+    sku:        d.sku
   };
 }
 
@@ -429,11 +455,10 @@ async function guardarDelivery() {
     link: v('d_link'), dir: v('d_direccion'), ref: v('d_ref'),
     coord: v('d_coord'), numref: v('d_numref'), nombres: v('d_nombres'),
     dni: v('d_dni'), orden: v('d_orden'), tipo: v('d_tipo'),
-    fecha: v('d_fecha'), rango: v('d_rango'), sku: v('d_sku'),
-    accesorio: v('d_accesorio'), promoLLAA: v('d_promo_llaa')
+    fecha: v('d_fecha'), rango: v('d_rango'), sku: v('d_sku')
   });
   clr(['d_link','d_direccion','d_ref','d_coord','d_numref','d_nombres','d_dni','d_orden',
-       'd_tipo','d_fecha','d_rango','d_sku','d_accesorio','d_promo_llaa']);
+       'd_tipo','d_fecha','d_rango','d_sku']);
   renderDelivery();
 }
 

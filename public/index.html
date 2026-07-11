@@ -9,6 +9,11 @@
 </head>
 <body>
 
+<datalist id="si_no_list">
+  <option value="Sí">
+  <option value="No">
+</datalist>
+
 <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
 
 <div class="sidebar" id="sidebar">
@@ -109,14 +114,6 @@
       <input type="text" id="t_fecha" class="input-fecha-trigger" placeholder="Fecha y hora que se acercara a la tienda" readonly onclick="abrirDatepicker('t_fecha')" required>
       <input type="text" id="t_equipo" placeholder="SKU de equipo, accesorio o SIM" required>
 
-      <input list="t_accesorio_list" id="t_accesorio" placeholder="¿Se vendió con accesorio a S/1?">
-      <datalist id="t_accesorio_list">
-        <option value="Sí">
-        <option value="No">
-      </datalist>
-
-      <input type="text" id="t_promo_llaa" placeholder="Promo del descuento de LLAA">
-
       <button class="accion" onclick="guardarTienda()">Guardar</button>
       <div class="historial" id="hist_tienda"></div>
     </div>
@@ -151,14 +148,6 @@
       <input type="text" id="d_fecha" class="input-fecha-trigger" placeholder="Fecha de entrega" readonly onclick="abrirDatepicker('d_fecha')" required>
       <input type="text" id="d_rango" placeholder="Rango de horario" required>
       <input type="text" id="d_sku" placeholder="SKU de equipo, accesorio o SIM" required>
-
-      <input list="d_accesorio_list" id="d_accesorio" placeholder="¿Se vendió con accesorio a S/1?">
-      <datalist id="d_accesorio_list">
-        <option value="Sí">
-        <option value="No">
-      </datalist>
-
-      <input type="text" id="d_promo_llaa" placeholder="Promo del descuento de LLAA">
 
       <button class="accion" onclick="guardarDelivery()">Guardar</button>
       <div class="historial" id="hist_delivery"></div>

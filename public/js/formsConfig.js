@@ -87,6 +87,10 @@ const FORMS_CONFIG = {
       tipo_venta: (valor) => normalizarTexto(valor),
       link:       (valor) => asegurarProtocolo(valor),
 
+      // Google Forms usa fecha nativa (aaaa-mm-dd). Nuestro voucher
+      // guarda dd/mm/aaaa (a veces con hora pegada), hay que convertir.
+      fecha: (valor) => convertirFechaParaGoogleForms(valor),
+
       // Operador Logístico depende del ORIGEN del voucher (tienda o delivery)
       operadorLogistico: (valor, voucher) => {
         return voucher._seccion === 'delivery' ? 'Logixtal' : 'Tienda';
@@ -118,4 +122,17 @@ function asegurarProtocolo(url) {
     return 'https://' + url;
   }
   return url;
+}
+
+/**
+ * Convierte "10/07/2026" o "10/07/2026 08:00" (nuestro formato)
+ * al formato "2026-07-10" que Google Forms necesita para
+ * autocompletar un campo de fecha nativo.
+ */
+function convertirFechaParaGoogleForms(valor) {
+  if (!valor) return '';
+  const match = String(valor).match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  if (!match) return valor; // si no coincide el formato, se envía tal cual
+  const [, dd, mm, yyyy] = match;
+  return `${yyyy}-${mm}-${dd}`;
 }

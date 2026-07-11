@@ -285,6 +285,14 @@ button.accion:hover { background: #1d4ed8; }
   opacity: 1;
 }
 
+/* Footer Ventas (Tienda/Delivery): Accesorio + Promo LLAA + ícono */
+.item-respuesta-ventas .item-respuesta-input-corto {
+  flex: 0 0 90px;
+}
+.item-respuesta-ventas .item-respuesta-input {
+  font-family: inherit;
+}
+
 /* Footer de solo-ícono para Tienda/Delivery (sin campo SS) */
 .item-forms-footer {
   display: flex;
