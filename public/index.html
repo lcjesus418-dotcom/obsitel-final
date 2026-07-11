@@ -9,10 +9,8 @@
 </head>
 <body>
 
-<!-- Hamburger -->
 <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
 
-<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
   <div style="height:38px;"></div>
   <button class="nav-btn" onclick="ir('obsitel')">Descuentos Obsitel</button>
@@ -23,7 +21,6 @@
   <button class="nav-btn papelera-btn" onclick="ir('papelera')">🗑 Papelera</button>
 </div>
 
-<!-- Main -->
 <div class="main">
 
   <!-- OBSITEL -->
@@ -100,14 +97,25 @@
 
       <input list="tipo_venta_list" id="t_tipo_venta" placeholder="Tipo de venta" required>
       <datalist id="tipo_venta_list">
-        <option value="Renovep">
-        <option value="Renocontado">
-        <option value="Renovep + Linea">
-        <option value="Renocontado + Linea">
+        <option value="Reno - Financiado con Entel-Oferta regular">
+        <option value="Reno - Oferta tarjeta de crédito sin intereses">
+        <option value="Porta - Línea Nueva">
+        <option value="Porta - Línea Adicional">
+        <option value="Venta Regular - Línea Nueva">
+        <option value="Venta Regular - Línea Adicional">
+        <option value="Accesorio">
       </datalist>
 
-      <input type="text" id="t_fecha" placeholder="Fecha y hora que se acercara a la tienda" required>
-      <input type="text" id="t_equipo" placeholder="Equipo" required>
+      <input type="text" id="t_fecha" class="input-fecha-trigger" placeholder="Fecha y hora que se acercara a la tienda" readonly onclick="abrirDatepicker('t_fecha')" required>
+      <input type="text" id="t_equipo" placeholder="SKU de equipo, accesorio o SIM" required>
+
+      <input list="t_accesorio_list" id="t_accesorio" placeholder="¿Se vendió con accesorio a S/1?">
+      <datalist id="t_accesorio_list">
+        <option value="Sí">
+        <option value="No">
+      </datalist>
+
+      <input type="text" id="t_promo_llaa" placeholder="Promo del descuento de LLAA">
 
       <button class="accion" onclick="guardarTienda()">Guardar</button>
       <div class="historial" id="hist_tienda"></div>
@@ -128,10 +136,29 @@
       <input type="text" id="d_nombres" placeholder="Nombres completos" required>
       <input type="text" id="d_dni" placeholder="DNI" required>
       <input type="text" id="d_orden" placeholder="Orden" required>
-      <input type="text" id="d_tipo" placeholder="Tipo de venta" required>
-      <input type="text" id="d_fecha" placeholder="Fecha de entrega" required>
+
+      <input list="d_tipo_venta_list" id="d_tipo" placeholder="Tipo de venta" required>
+      <datalist id="d_tipo_venta_list">
+        <option value="Reno - Financiado con Entel-Oferta regular">
+        <option value="Reno - Oferta tarjeta de crédito sin intereses">
+        <option value="Porta - Línea Nueva">
+        <option value="Porta - Línea Adicional">
+        <option value="Venta Regular - Línea Nueva">
+        <option value="Venta Regular - Línea Adicional">
+        <option value="Accesorio">
+      </datalist>
+
+      <input type="text" id="d_fecha" class="input-fecha-trigger" placeholder="Fecha de entrega" readonly onclick="abrirDatepicker('d_fecha')" required>
       <input type="text" id="d_rango" placeholder="Rango de horario" required>
-      <input type="text" id="d_sku" placeholder="SKU de equipo y accesorio" required>
+      <input type="text" id="d_sku" placeholder="SKU de equipo, accesorio o SIM" required>
+
+      <input list="d_accesorio_list" id="d_accesorio" placeholder="¿Se vendió con accesorio a S/1?">
+      <datalist id="d_accesorio_list">
+        <option value="Sí">
+        <option value="No">
+      </datalist>
+
+      <input type="text" id="d_promo_llaa" placeholder="Promo del descuento de LLAA">
 
       <button class="accion" onclick="guardarDelivery()">Guardar</button>
       <div class="historial" id="hist_delivery"></div>
@@ -163,6 +190,7 @@
 <script src="/js/formsConfig.js"></script>
 <script src="/js/googleFormsEngine.js"></script>
 <script src="/js/configApp.js"></script>
+<script src="/js/datepicker.js"></script>
 <script src="/js/app.js"></script>
 </body>
 </html>

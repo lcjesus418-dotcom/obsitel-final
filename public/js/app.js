@@ -19,7 +19,7 @@ function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('collapsed');
 }
 
-/* ── Toggle recibo NC / OCC / DEVOLUCIÓN ──────────────── */
+/* ── Toggle recibo NC / OCC / DEVOLUCIÓN (solo Obsitel) ─── */
 function toggleRecibo() {
   const mod = (document.getElementById('modalidad').value || '').toUpperCase().trim();
   const nc  = document.getElementById('recibo_nc');
@@ -57,18 +57,40 @@ function fechaHoraAhora() {
   return `${dd}/${mm}/${now.getFullYear()} ${hh}:${min}`;
 }
 
-/* ── Viñeta de respuesta NC + ícono Google Forms ─────────── */
-function crearVinetaRespuesta(reg, seccion) {
+/* ── Ícono Google Forms (solo abre/envía, sin campo extra) ─ */
+function crearIconoForms(reg, seccion, voucherParaForm) {
+  const wrap = document.createElement('div');
+  wrap.className = 'item-forms-footer';
+
+  const iconBtn = document.createElement('div');
+  iconBtn.className = 'item-respuesta-icon';
+  iconBtn.title = 'Enviar a Google Forms';
+  if (reg._formEnviado) iconBtn.classList.add('enviado');
+
+  iconBtn.addEventListener('click', () => {
+    const tipoForm = (seccion === 'tienda' || seccion === 'delivery') ? 'ventas' : 'descuentos';
+    enviarAGoogleForms(tipoForm, voucherParaForm(), iconBtn);
+    if (reg._id) {
+      setTimeout(() => apiFetch('PUT', `${seccion}/${reg._id}`, { _formEnviado: true }), 500);
+    }
+  });
+
+  wrap.appendChild(iconBtn);
+  return wrap;
+}
+
+/* ── Viñeta SS (solo Descuentos) + ícono Google Forms ────── */
+function crearVinetaSS(reg, seccion, voucherParaForm) {
   const wrap = document.createElement('div');
   wrap.className = 'item-respuesta';
 
   const prefix = document.createElement('span');
   prefix.className = 'item-respuesta-prefix';
-  prefix.textContent = 'NC:';
+  prefix.textContent = 'SS:';
 
   const input = document.createElement('input');
   input.type = 'text';
-  input.placeholder = 'NC';
+  input.placeholder = 'SS';
   input.className = 'item-respuesta-input';
   input.value = reg._nc || '';
 
@@ -81,7 +103,6 @@ function crearVinetaRespuesta(reg, seccion) {
     const val = input.value.trim();
     result.textContent = val ? `1-${val}` : '';
     reg._nc = val;
-
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
       if (reg._id) apiFetch('PUT', `${seccion}/${reg._id}`, { _nc: val });
@@ -90,14 +111,12 @@ function crearVinetaRespuesta(reg, seccion) {
 
   const iconBtn = document.createElement('div');
   iconBtn.className = 'item-respuesta-icon';
-  iconBtn.style.backgroundImage = 'url(/assets/google-forms.png)';
+  iconBtn.title = 'Enviar a Google Forms';
   if (reg._formEnviado) iconBtn.classList.add('enviado');
 
   iconBtn.addEventListener('click', () => {
-    const voucher = { ...reg, nc: input.value.trim() };
-    const tipoForm = (seccion === 'tienda' || seccion === 'delivery') ? 'ventas' : 'descuentos';
-    enviarAGoogleForms(tipoForm, voucher, iconBtn);
-
+    const voucher = { ...voucherParaForm(), nc: input.value.trim() };
+    enviarAGoogleForms('descuentos', voucher, iconBtn);
     if (reg._id) {
       setTimeout(() => apiFetch('PUT', `${seccion}/${reg._id}`, { _formEnviado: true }), 500);
     }
@@ -111,7 +130,7 @@ function crearVinetaRespuesta(reg, seccion) {
 }
 
 /* ── Crear baucher ───────────────────────────────────────── */
-function crearItem(reg, texto, onDel, onEdit, seccion) {
+function crearItem(reg, texto, onDel, onEdit, seccion, voucherParaForm) {
   const div = document.createElement('div');
   div.className = 'item';
   div.dataset.id = reg._id;
@@ -173,17 +192,20 @@ function crearItem(reg, texto, onDel, onEdit, seccion) {
   body.className = 'item-body';
   body.innerText = texto;
 
-  const respuesta = crearVinetaRespuesta(reg, seccion);
+  // Descuentos -> viñeta SS + ícono. Tienda/Delivery -> solo ícono.
+  const footer = (seccion === 'obsitel')
+    ? crearVinetaSS(reg, seccion, voucherParaForm)
+    : crearIconoForms(reg, seccion, voucherParaForm);
 
   div.appendChild(header);
   div.appendChild(desc);
   div.appendChild(body);
-  div.appendChild(respuesta);
+  div.appendChild(footer);
   return div;
 }
 
 /* ── Render historial genérico ───────────────────────────── */
-async function renderHist(seccion, genTexto) {
+async function renderHist(seccion, genTexto, genVoucherForm) {
   const cont = document.getElementById('hist_' + seccion);
   cont.innerHTML = '<div class="loader">Cargando...</div>';
 
@@ -199,7 +221,7 @@ async function renderHist(seccion, genTexto) {
       txt,
       async () => {
         await apiFetch('DELETE', `${seccion}/${reg._id}`);
-        renderHist(seccion, genTexto);
+        renderHist(seccion, genTexto, genVoucherForm);
       },
       (itemDiv) => {
         const bodyEl = itemDiv.querySelector('.item-body');
@@ -228,7 +250,8 @@ async function renderHist(seccion, genTexto) {
           ta.remove(); btnOk.remove(); btnCancel.remove();
         };
       },
-      seccion
+      seccion,
+      () => genVoucherForm(regCompleto)
     );
     cont.appendChild(item);
   });
@@ -283,7 +306,15 @@ function textoObsitel(d) {
   ].join('\n');
 }
 
-function renderObsitel() { renderHist('obsitel', textoObsitel); }
+// Voucher plano que se le pasa al motor (sin nada de Google Forms adentro)
+function voucherObsitel(d) {
+  return {
+    _seccion: 'obsitel',
+    link: d.link, modalidad: d.modalidad, motivo: d.motivo, monto: d.monto
+  };
+}
+
+function renderObsitel() { renderHist('obsitel', textoObsitel, voucherObsitel); }
 
 async function guardarObsitel() {
   const mod = v('modalidad').toUpperCase();
@@ -314,12 +345,30 @@ function textoTienda(d) {
     'PDV: ' + (d.pdv || ''),
     'Tipo de venta: ' + (d.tipo_venta || ''),
     'Fecha y hora que se acercara a la tienda: ' + (d.fecha || ''),
-    'Equipo: ' + (d.equipo || ''),
+    'SKU de equipo, accesorio o SIM: ' + (d.equipo || ''),
+    '¿Se vendió con accesorio a S/1?: ' + (d.accesorio || ''),
+    'Promo del descuento de LLAA: ' + (d.promoLLAA || ''),
     'Canal: S2S - Burns'
   ].join('\n');
 }
 
-function renderTienda() { renderHist('tienda', textoTienda); }
+// Mapea los campos de Tienda a los nombres canónicos que espera formsConfig.ventas
+function voucherTienda(d) {
+  return {
+    _seccion:   'tienda',
+    link:       d.link,
+    dni:        d.dni,
+    orden:      d.orden,
+    tipo_venta: d.tipo_venta,
+    fecha:      d.fecha,
+    horario:    '',
+    sku:        d.equipo,
+    accesorio:  d.accesorio,
+    promoLLAA:  d.promoLLAA
+  };
+}
+
+function renderTienda() { renderHist('tienda', textoTienda, voucherTienda); }
 
 async function guardarTienda() {
   await apiFetch('POST', 'tienda', {
@@ -327,9 +376,11 @@ async function guardarTienda() {
     link: v('t_link'), pickup: v('t_pickup'), nombre: v('t_nombre'),
     dni: v('t_dni'), orden: v('t_orden'), referencia: v('t_referencia'),
     tienda: v('t_tienda'), pdv: v('t_pdv'), tipo_venta: v('t_tipo_venta'),
-    fecha: v('t_fecha'), equipo: v('t_equipo')
+    fecha: v('t_fecha'), equipo: v('t_equipo'),
+    accesorio: v('t_accesorio'), promoLLAA: v('t_promo_llaa')
   });
-  clr(['t_link','t_pickup','t_nombre','t_dni','t_orden','t_referencia','t_tienda','t_pdv','t_tipo_venta','t_fecha','t_equipo']);
+  clr(['t_link','t_pickup','t_nombre','t_dni','t_orden','t_referencia','t_tienda','t_pdv',
+       't_tipo_venta','t_fecha','t_equipo','t_accesorio','t_promo_llaa']);
   renderTienda();
 }
 
@@ -349,11 +400,28 @@ function textoDelivery(d) {
     'Tipo de venta: ' + (d.tipo || ''),
     'Fecha de entrega: ' + (d.fecha || ''),
     'Rango de horario: ' + (d.rango || ''),
-    'SKU de equipo y accesorio: ' + (d.sku || '')
+    'SKU de equipo, accesorio o SIM: ' + (d.sku || ''),
+    '¿Se vendió con accesorio a S/1?: ' + (d.accesorio || ''),
+    'Promo del descuento de LLAA: ' + (d.promoLLAA || '')
   ].join('\n');
 }
 
-function renderDelivery() { renderHist('delivery', textoDelivery); }
+function voucherDelivery(d) {
+  return {
+    _seccion:   'delivery',
+    link:       d.link,
+    dni:        d.dni,
+    orden:      d.orden,
+    tipo_venta: d.tipo,
+    fecha:      d.fecha,
+    horario:    d.rango,
+    sku:        d.sku,
+    accesorio:  d.accesorio,
+    promoLLAA:  d.promoLLAA
+  };
+}
+
+function renderDelivery() { renderHist('delivery', textoDelivery, voucherDelivery); }
 
 async function guardarDelivery() {
   await apiFetch('POST', 'delivery', {
@@ -361,9 +429,11 @@ async function guardarDelivery() {
     link: v('d_link'), dir: v('d_direccion'), ref: v('d_ref'),
     coord: v('d_coord'), numref: v('d_numref'), nombres: v('d_nombres'),
     dni: v('d_dni'), orden: v('d_orden'), tipo: v('d_tipo'),
-    fecha: v('d_fecha'), rango: v('d_rango'), sku: v('d_sku')
+    fecha: v('d_fecha'), rango: v('d_rango'), sku: v('d_sku'),
+    accesorio: v('d_accesorio'), promoLLAA: v('d_promo_llaa')
   });
-  clr(['d_link','d_direccion','d_ref','d_coord','d_numref','d_nombres','d_dni','d_orden','d_tipo','d_fecha','d_rango','d_sku']);
+  clr(['d_link','d_direccion','d_ref','d_coord','d_numref','d_nombres','d_dni','d_orden',
+       'd_tipo','d_fecha','d_rango','d_sku','d_accesorio','d_promo_llaa']);
   renderDelivery();
 }
 

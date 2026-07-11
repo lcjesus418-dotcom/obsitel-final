@@ -268,18 +268,30 @@ button.accion:hover { background: #1d4ed8; }
   cursor: pointer;
   width: 24px;
   height: 24px;
+  background-color: transparent;
+  background-image: url(/assets/google-forms.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   filter: grayscale(1);
-  opacity: 0.6;
+  opacity: 0.55;
   transition: all 0.3s;
   flex-shrink: 0;
+  border: none;
 }
 .item-respuesta-icon:hover { opacity: 0.8; }
 .item-respuesta-icon.enviado {
   filter: grayscale(0);
   opacity: 1;
+}
+
+/* Footer de solo-ícono para Tienda/Delivery (sin campo SS) */
+.item-forms-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #e2e8f0;
 }
 
 /* ── Papelera ─────────────────────────────────────────── */
@@ -371,6 +383,175 @@ button.accion:hover { background: #1d4ed8; }
   color: #94a3b8;
   font-size: 13px;
   padding: 10px 0;
+}
+
+/* ── Datepicker (Calendario) ──────────────────────────── */
+.datepicker-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.datepicker-content {
+  background: white;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-width: 320px;
+  width: 90%;
+}
+
+.datepicker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.datepicker-nav-btn {
+  background: #e0e7ff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+.datepicker-nav-btn:hover { background: #c7d2fe; }
+
+.datepicker-month-year {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  text-align: center;
+  flex: 1;
+}
+
+.datepicker-buttons {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.datepicker-btn-hoy {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.datepicker-btn-hoy:hover { background: #059669; }
+
+.datepicker-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+.datepicker-tabla th {
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.datepicker-dia {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  color: #1e293b;
+}
+.datepicker-dia:hover { background: #f1f5f9; }
+
+.datepicker-dia.datepicker-hoy {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.datepicker-dia.datepicker-seleccionado {
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+}
+
+.datepicker-celda-vacia {
+  padding: 8px 4px;
+}
+
+.datepicker-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.datepicker-hora-input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: monospace;
+}
+.datepicker-hora-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.datepicker-acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.datepicker-btn-guardar, .datepicker-btn-cancelar {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.datepicker-btn-guardar {
+  background: #2563eb;
+  color: white;
+}
+.datepicker-btn-guardar:hover { background: #1d4ed8; }
+
+.datepicker-btn-cancelar {
+  background: #e5e7eb;
+  color: #1e293b;
+}
+.datepicker-btn-cancelar:hover { background: #d1d5db; }
+
+/* Input de fecha (readonly, clickable, mismo estilo que los demás) */
+.input-fecha-trigger {
+  cursor: pointer;
+  background: #f8fafc;
 }
 
 /* ── Responsive ───────────────────────────────────────── */

@@ -16,7 +16,6 @@ const FORMS_CONFIG = {
   descuentos: {
     url: 'https://docs.google.com/forms/d/e/1FAIpQLSey7MiTjSTNtl0H1pP39cZLQIvtQZlPtVN4gykdzeiVzDPfTQ/viewform',
 
-    // Mapeo: campo interno del voucher -> entry de Google Forms
     entries: {
       link:      'entry.710025431',
       modalidad: 'entry.692017987',
@@ -26,70 +25,69 @@ const FORMS_CONFIG = {
       asesor:    'entry.1628070971'
     },
 
-    // Campos obligatorios para poder enviar (deben tener valor)
     camposObligatorios: ['link', 'modalidad', 'motivo', 'monto'],
 
-    // Opciones válidas para ciertos campos (validación estricta)
-    // Si el valor no coincide EXACTO con una de estas opciones, no se envía
     opcionesValidas: {
       modalidad: ['NC', 'OCC', 'DEVOLUCIÓN DE SALDO']
     },
 
-    // Reglas de conversión: se aplican antes de enviar
     reglas: {
       modalidad: (valor) => normalizarTexto(valor).toUpperCase(),
       motivo:    (valor) => normalizarTexto(valor).toUpperCase(),
       link:      (valor) => asegurarProtocolo(valor),
-      // El asesor SIEMPRE se lee desde Configuración, nunca desde el voucher
       asesor:    (valor, voucher, config) => config.usuarioSiebel || ''
     }
   },
 
   /* ──────────────────────────────────────────────────────
      FORMULARIO: VENTAS (Tienda + Delivery)
-     
-     ⚠️ IMPORTANTE: Reemplaza la URL y los "entry.XXXXXXX" con
-     los valores REALES de tu Google Form de Ventas.
-     Puedes obtenerlos abriendo el formulario, click en los
-     3 puntos > "Obtener enlace precompletado", llenas cualquier
-     dato y Google te genera la URL con los entry correctos.
+     Una sola URL compartida. El campo "operadorLogistico"
+     decide qué sección ve Google Forms (Tienda o Logixtal).
      ────────────────────────────────────────────────────── */
   ventas: {
-    url: 'https://docs.google.com/forms/d/e/REEMPLAZAR_CON_TU_FORM_ID/viewform',
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSc3Do1gjNqAjComOWaag63Ktv-l1v3V1jWPbnsiKgO4RSfZhw/viewform',
 
     entries: {
       // ── Primera página (compartida Tienda / Delivery) ──
-      tipoVenta:         'entry.REEMPLAZAR_1',
-      fechaEntrega:      'entry.REEMPLAZAR_2',
-      horario:           'entry.REEMPLAZAR_3',
-      dni:               'entry.REEMPLAZAR_4',
-      orden:             'entry.REEMPLAZAR_5',
-      operadorLogistico: 'entry.REEMPLAZAR_6',
+      link:              'entry.430850105',
+      dni:               'entry.1802650898',
+      orden:             'entry.1831883',
+      tipo_venta:        'entry.522329256',
+      fecha:             'entry.1644009475',
+      horario:           'entry.756982391',
+      operadorLogistico: 'entry.2107675316',
 
       // ── Segunda página (solo Tienda) ──
-      tienda:            'entry.REEMPLAZAR_7',
-      pdv:               'entry.REEMPLAZAR_8',
-      pickup:            'entry.REEMPLAZAR_9',
+      supervisor:        'entry.284304021',
+      usuarioSiebel:     'entry.233648853',
 
       // ── Última página (compartida) ──
-      nombre:            'entry.REEMPLAZAR_10',
-      equipo:            'entry.REEMPLAZAR_11',
-      usuarioSiebel:     'entry.REEMPLAZAR_12',
-      supervisor:        'entry.REEMPLAZAR_13'
+      sku:               'entry.1620499627',
+      accesorio:         'entry.919354596',
+      promoLLAA:         'entry.695687517'
     },
 
-    camposObligatorios: ['tipoVenta', 'fechaEntrega', 'dni', 'orden'],
+    camposObligatorios: ['link', 'dni', 'orden', 'tipo_venta', 'fecha'],
 
     opcionesValidas: {
-      tipoVenta: ['Renovep', 'Renocontado', 'Renovep + Linea', 'Renocontado + Linea']
+      tipo_venta: [
+        'Reno - Financiado con Entel-Oferta regular',
+        'Reno - Oferta tarjeta de crédito sin intereses',
+        'Porta - Línea Nueva',
+        'Porta - Línea Adicional',
+        'Venta Regular - Línea Nueva',
+        'Venta Regular - Línea Adicional',
+        'Accesorio'
+      ],
+      accesorio: ['Sí', 'No']
     },
 
     reglas: {
-      tipoVenta:    (valor) => normalizarTexto(valor),
-      nombre:       (valor) => normalizarTexto(valor),
-      dni:          (valor) => normalizarTexto(valor),
+      dni:        (valor) => normalizarTexto(valor),
+      tipo_venta: (valor) => normalizarTexto(valor),
+      link:       (valor) => asegurarProtocolo(valor),
 
-      // Regla clave: Operador Logístico depende del ORIGEN del voucher
+      // Operador Logístico depende del ORIGEN del voucher (tienda o delivery)
       operadorLogistico: (valor, voucher) => {
         return voucher._seccion === 'delivery' ? 'Logixtal' : 'Tienda';
       },
@@ -104,14 +102,13 @@ const FORMS_CONFIG = {
 
 /* ════════════════════════════════════════════════════════
    Helpers de limpieza / normalización de texto
-   Usados por las reglas de conversión de arriba
    ════════════════════════════════════════════════════════ */
 
 function normalizarTexto(texto) {
   if (!texto) return '';
   return String(texto)
-    .trim()                    // quita espacios al inicio/final
-    .replace(/\s+/g, ' ');     // colapsa espacios múltiples en uno
+    .trim()
+    .replace(/\s+/g, ' ');
 }
 
 function asegurarProtocolo(url) {
