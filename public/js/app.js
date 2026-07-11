@@ -394,9 +394,16 @@ function voucherTienda(d) {
     orden:      d.orden,
     tipo_venta: d.tipo_venta,
     fecha:      d.fecha,
-    horario:    '',
+    horario:    extraerHora(d.fecha), // Tienda guarda fecha+hora juntos; se separa la hora aquí
     sku:        d.equipo
   };
+}
+
+// Extrae "08:00" desde "10/07/2026 08:00"
+function extraerHora(fechaHoraTexto) {
+  if (!fechaHoraTexto) return '';
+  const match = String(fechaHoraTexto).match(/(\d{2}:\d{2})/);
+  return match ? match[1] : '';
 }
 
 function renderTienda() { renderHist('tienda', textoTienda, voucherTienda); }

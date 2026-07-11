@@ -91,6 +91,15 @@ const FORMS_CONFIG = {
       // guarda dd/mm/aaaa (a veces con hora pegada), hay que convertir.
       fecha: (valor) => convertirFechaParaGoogleForms(valor),
 
+      // Horario: en Delivery viene de un campo propio (Rango de horario).
+      // En Tienda no existe campo separado — se extrae la hora directamente
+      // del campo Fecha y hora (ej: "10/07/2026 08:00" -> "08:00").
+      horario: (valor, voucher) => {
+        if (voucher._seccion === 'delivery') return normalizarTexto(valor);
+        const match = String(voucher.fecha || '').match(/(\d{2}):(\d{2})/);
+        return match ? match[0] : '';
+      },
+
       // Operador Logístico depende del ORIGEN del voucher (tienda o delivery)
       operadorLogistico: (valor, voucher) => {
         return voucher._seccion === 'delivery' ? 'Logixtal' : 'Tienda';
