@@ -153,12 +153,12 @@ function abrirDatepicker(inputId, callback) {
     const ultimo = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0);
     const diaInicio = primero.getDay();
 
-    let filaActual = tbody.insertRow(0);
+    let filaActual = tbody.insertRow();
     let celdas = 0;
 
     // Celdas vacías al inicio
     for (let i = 0; i < diaInicio; i++) {
-      const td = filaActual.insertCell(0);
+      const td = filaActual.insertCell();
       td.className = 'datepicker-celda-vacia';
     }
     celdas = diaInicio;
@@ -166,10 +166,10 @@ function abrirDatepicker(inputId, callback) {
     // Días del mes
     for (let dia = 1; dia <= ultimo.getDate(); dia++) {
       if (celdas % 7 === 0 && celdas > 0) {
-        filaActual = tbody.insertRow(0);
+        filaActual = tbody.insertRow();  // Insertar al final, no al inicio
       }
 
-      const td = filaActual.insertCell(0);
+      const td = filaActual.insertCell();  // Insertar al final, no al inicio
       td.textContent = dia;
       td.className = 'datepicker-dia';
 

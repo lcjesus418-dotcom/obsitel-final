@@ -129,14 +129,9 @@ function crearVinetaSS(reg, seccion, voucherParaForm) {
   input.className = 'item-respuesta-input';
   input.value = reg._nc || '';
 
-  const result = document.createElement('span');
-  result.className = 'item-respuesta-result';
-  result.textContent = input.value ? `1-${input.value}` : '';
-
   let debounceTimer;
   input.addEventListener('input', () => {
     const val = input.value.trim();
-    result.textContent = val ? `1-${val}` : '';
     reg._nc = val;
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
@@ -159,7 +154,6 @@ function crearVinetaSS(reg, seccion, voucherParaForm) {
 
   wrap.appendChild(prefix);
   wrap.appendChild(input);
-  wrap.appendChild(result);
   wrap.appendChild(iconBtn);
   return wrap;
 }
@@ -345,7 +339,8 @@ function textoObsitel(d) {
 function voucherObsitel(d) {
   return {
     _seccion: 'obsitel',
-    link: d.link, modalidad: d.modalidad, motivo: d.motivo, monto: d.monto
+    link: d.link, modalidad: d.modalidad, motivo: d.motivo, monto: d.monto,
+    asesor: ''  // Se completa automáticamente desde config.usuarioSiebel (Configuración)
   };
 }
 
