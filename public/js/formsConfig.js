@@ -35,7 +35,7 @@ const FORMS_CONFIG = {
       modalidad: (valor) => normalizarTexto(valor).toUpperCase(),
       motivo:    (valor) => normalizarTexto(valor).toUpperCase(),
       link:      (valor) => asegurarProtocolo(valor),
-      asesor:    (valor, voucher, config) => config.usuarioSiebel || ''
+      asesor:    (valor, voucher, config) => config.asesorDescuentos || ''
     }
   },
 

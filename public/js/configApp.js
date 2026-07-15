@@ -1,14 +1,14 @@
 /* ════════════════════════════════════════════════════════
    configApp.js  –  Sección de Configuración de la app
    
-   Usuario Siebel y Supervisor PICK UP se guardan en
-   localStorage y el motor (googleFormsEngine.js) los lee
-   automáticamente. Nunca se piden en cada voucher.
+   3 campos guardados en localStorage y leídos automáticamente
+   por el motor (googleFormsEngine.js):
+   - Asesor Descuentos (nombre completo) -> formulario Descuentos
+   - Asesor Venta (código SBU_)          -> formulario Ventas
+   - Supervisor PICK UP                  -> formulario Ventas
 
    Estilo: campos tipo "datalist" (igual a los demás inputs
-   de la app) — no <select> nativo. Al escribir, las opciones
-   se filtran como sugerencias, pero el campo se ve idéntico
-   a cualquier otro input de texto.
+   de la app) — no <select> nativo.
    ════════════════════════════════════════════════════════ */
 
 const OPCIONES_SUPERVISOR = [
@@ -20,7 +20,8 @@ const OPCIONES_SUPERVISOR = [
   'Flavio'
 ];
 
-const OPCIONES_USUARIO_SIEBEL = [
+// Asesor Venta (Tienda/Delivery) — código Usuario Siebel
+const OPCIONES_ASESOR_VENTA = [
   'SBU_MGARCIAY','SBU_JCRUZC','SBU_VARISMENDI','SBU_AARRUNATEGU','SBU_AHERNANDEZ',
   'SBU_MMENDOZA','SBU_CVARGAS','SBU_YESPINOZAR','SBU_DCABALLEROC','SBU_JLASTRA',
   'SBU_TPPUMA','SBU_SPEREZF','SBU_MVALIENTE','SBU_SORDINOLA','SBU_ESALAZARO',
@@ -42,6 +43,48 @@ const OPCIONES_USUARIO_SIEBEL = [
   'SBU_ISANCHEZT','SBU_JSILVAM','SBU_JISUIZAF','SBU_KMVERTIZM','SBU_YCHOQUEP'
 ];
 
+// Asesor Descuentos (Obsitel) — nombre completo
+const OPCIONES_ASESOR_DESCUENTOS = [
+  'Zuta Encarnación Mary Isabel','Curihuaman Tucto Jhire Dora','Melany Stefani Mendoza Chavez',
+  'Perez Fernandez Stephanie Yajaira','Lastra Zuñiga Jennifer Yomara','Baca Quiquin Johaans Sebastian',
+  'De la Cruz Hinostroza Angela Lizeth','Cruz Rojas Eliana Estefani','Vargas Bernilla Shirley Valery',
+  'Aroste Sarmiento Jefferson Phol','Purizaca Prieto Adriana Ivett','Peñaloza Chavez Dagianna Judith',
+  'Urbano Calderon Elvira Lizbeth','Vasquez Altez Geraldine Brigitte','Hilario De La Cruz Valery Shelly',
+  'Espinoza Rubiños Yrene Del Rosario','Medina Alama Luis Alberto','Rojas Medina Ronny Roberto',
+  'Hidalgo Chavez Alexander Junior','Tafur Huaman Zuli Scarlet','Portal Villegas Jesús Guillermo',
+  'Bernilla Carrillo Martin Daniel','Domador Alberca Claudia Giannella','Saavedra Asencio Yoseli Estrellita',
+  'Briones Correa Rodolfo Antonio','Simon Nahui Stefano Alessandro','Broncano Chumpitazi Jorge Adrian',
+  'Sofia Elena Ames Puchoc','Puma Poma Thalia','Villanueva Cajamarca Xiomara',
+  'Arrunategui Altez Alexandra Arabel','Arismendi Quispe Vanessa','Hernandez Pinto Allison Shirley',
+  'Mendoza Chavez Melany Stefani','Sanchez Trujillo Yeico Jesus','Contreras Calle Cristhian Daniel',
+  'Valiente Bernilla Marco Antonio','Vargas Villanueva Cinthya Brighit','Maria Isabel Cisneros Vela',
+  'Huamani Gomez Janette Lisseth','Lopez Quispe Yonatan Claudio','Cornejo Susanibar Emmy Yuriko',
+  'Alessandro Piero Perez Arohuillca','Deysi Roxana Caballero Chinoy','Briones Correa Silvia Margarita',
+  'Cubas Vásquez Gian Marco','Soriano Huapaya Clara','Salcedo Machado Jennifer Vanessa',
+  'Aguirre Pérez Luis Alberto','Terrones De la Cruz Adriana Antuaneth','Paje Ames Milan Jaime',
+  'Linares Perez Álvaro','Suárez Lucho Rosario Natali','Sara Esther Nieto Santiago',
+  'Daniela Morey Tantachuco','Angella Gabriella Madrid Burgos','Zully Betty Saturno Gervacio',
+  'Brayan Aldair Chavez Unda','Sandy Domitila Mancisidor Alvarado','Legua Jara Rosa Vanessa',
+  'Lopez Ugarte Katherine Doris','Marin de la Cruz Jean Paul','Goñi Medrano Maryorit Andrea',
+  'Saavedra Ynche Mayra Miluska','Rojas Blas Khiara Maria','Velasquez Oyola Giorgia Melissa',
+  'Martinez Sedan Jessica Karina','Andrade Pacheco Yosselin Lucila','Huayta Alzamora Angela Yessenia',
+  'Farfan Peña Cristian Daniel','Caja Lazón Cristina Lizeth','Ramirez Valle Mishell Maria',
+  'Soriano Pantoja Miguel Angel','Ubaqui Dueñas Jose David','Barros Loza Pierina Pamela',
+  'Rojas Lacerna Milagros','Cordero Quispe Liseth Yessenia','Yarango Nolasco Yanina Lissay',
+  'Palma Gonzales Winny Linette','Castagnola Lizarbe Andree Martin','Manta Sanchez Jennifer Evelyn',
+  'Puescas Obando Nathaly Marleny','Ramirez Pareja Nilda','Carrasco Llanos Liseth',
+  'Mogollon Alarcón Ana Lucia','Delgado Vargas Estefani Victoria','Mogollon Alarcón Carolina',
+  'Terrones de la Cruz Lidia Elizabeth','Alor Herrera Kely Alexandra','Bustamante Campusano Jhon Jefferson',
+  'Farfan Arias Yuliana Paola','Jimenez Garcia Jimmy','Lozano López Vanessa Magaly',
+  'Quinde Retete Jazmin Yuri','Conopuma Arenaza Karem Giselle','Cruzado Manihuari Darwin Duverly',
+  'Espinoza Hernández Anggi Nicole','Godoy Llajaruna María Pía','Isuiza Flores Jhoana Cristina',
+  'Manta Sanchez Milagros Lisseth','Murayari Servan Brillit Alexandra','Muñoz De la Cruz Angie Andrea',
+  'Ramos Espinoza Carlos Daniel','Sanchez Trejo Israel','Silva Mendoza Jeremy',
+  'Vertiz Montejo Kimberly Monica','Choque Portocarrero Yeremy Katyuska','Romero Díaz Amy Alondra',
+  'Rengifo Ferreñan Cadith Aracelly','Díaz Prada Flavio Josué','Cruz Díaz Jhonatan Angel',
+  'Ibáñez Mendoza Karen Maite','Obando Quiroga Maria Alondra','Ancho Sanchez María Victoria'
+];
+
 /* ── Renderizar la sección de Configuración ────────────── */
 function renderConfiguracion() {
   const cont = document.getElementById('config-form-fields');
@@ -50,15 +93,22 @@ function renderConfiguracion() {
   const actual = obtenerConfiguracionUsuario();
 
   cont.innerHTML = `
-    <label class="config-label">Usuario Siebel</label>
-    <input list="config_usuario_siebel_list" id="config-usuario-siebel"
-           placeholder="Buscar usuario Siebel..." value="${actual.usuarioSiebel || ''}">
-    <datalist id="config_usuario_siebel_list">
-      ${OPCIONES_USUARIO_SIEBEL.map(op => `<option value="${op}">`).join('')}
+    <label class="config-label">Asesor Descuentos</label>
+    <input type="text" list="config_asesor_descuentos_list" id="config-asesor-descuentos"
+           placeholder="Buscar asesor..." value="${actual.asesorDescuentos || ''}">
+    <datalist id="config_asesor_descuentos_list">
+      ${OPCIONES_ASESOR_DESCUENTOS.map(op => `<option value="${op}">`).join('')}
+    </datalist>
+
+    <label class="config-label">Asesor Venta</label>
+    <input type="text" list="config_asesor_venta_list" id="config-asesor-venta"
+           placeholder="Buscar asesor..." value="${actual.usuarioSiebel || ''}">
+    <datalist id="config_asesor_venta_list">
+      ${OPCIONES_ASESOR_VENTA.map(op => `<option value="${op}">`).join('')}
     </datalist>
 
     <label class="config-label">Supervisor PICK UP</label>
-    <input list="config_supervisor_list" id="config-supervisor"
+    <input type="text" list="config_supervisor_list" id="config-supervisor"
            placeholder="Buscar supervisor..." value="${actual.supervisor || ''}">
     <datalist id="config_supervisor_list">
       ${OPCIONES_SUPERVISOR.map(op => `<option value="${op}">`).join('')}
@@ -73,10 +123,11 @@ function renderConfiguracion() {
 
 /* ── Guardar configuración desde el formulario ─────────── */
 function guardarConfigDesdeForm() {
-  const usuarioSiebel = document.getElementById('config-usuario-siebel').value.trim();
-  const supervisor    = document.getElementById('config-supervisor').value.trim();
+  const asesorDescuentos = document.getElementById('config-asesor-descuentos').value.trim();
+  const usuarioSiebel     = document.getElementById('config-asesor-venta').value.trim();
+  const supervisor        = document.getElementById('config-supervisor').value.trim();
 
-  guardarConfiguracionUsuario({ usuarioSiebel, supervisor });
+  guardarConfiguracionUsuario({ asesorDescuentos, usuarioSiebel, supervisor });
 
   const msg = document.getElementById('config-guardado-msg');
   msg.textContent = '✅ Configuración guardada';
