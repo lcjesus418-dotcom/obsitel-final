@@ -17,10 +17,24 @@ auth.onAuthStateChanged((user) => {
   } else if (!user && !enPaginaLogin && !enInicio) {
     // No hay sesión y está en la app -> ir a login
     window.location.href = '/login.html';
+  } else if (!user && (enPaginaLogin || enInicio)) {
+    // Sin sesión en login/inicio -> ocultar loading y dejar que se vea la página de login
+    const loadingOverlay = document.getElementById('auth-loading-overlay');
+    if (loadingOverlay) loadingOverlay.style.display = 'none';
   } else if (user && !enPaginaLogin && !enInicio) {
     // Sesión activa en la app -> mostrar nombre/correo y cargar datos
+    
+    // Ocultar la pantalla de carga
+    const loadingOverlay = document.getElementById('auth-loading-overlay');
+    if (loadingOverlay) loadingOverlay.style.display = 'none';
+    
     const nombreEl = document.getElementById('usuario-actual');
     if (nombreEl) nombreEl.textContent = user.displayName || user.email;
+    
+    // Mostrar todo el contenido de la app (que estaba oculto con display: none)
+    const appContent = document.getElementById('app-content');
+    if (appContent) appContent.style.display = 'block';
+    
     if (typeof iniciarApp === 'function') iniciarApp();
   }
 });

@@ -6,8 +6,39 @@
   <meta name="description" content="Descuento Obsitel - Sistema de gestión de tickets y vouchers Entel">
   <title>Descuento Obsitel</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    /* Pantalla de carga que cubre TODO hasta que auth.js la oculte */
+    #auth-loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .auth-loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
+
+<!-- Pantalla de carga (se oculta cuando auth.js confirma sesión) -->
+<div id="auth-loading-overlay">
+  <div class="auth-loading-spinner"></div>
+</div>
+
+<div id="app-content" style="display: none;">
 
 <datalist id="si_no_list">
   <option value="Sí">
@@ -177,6 +208,8 @@
   </div>
 
 </div><!-- /.main -->
+
+</div><!-- /#app-content (mostrado solo si hay sesión) -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
