@@ -41,6 +41,20 @@ body {
 .sidebar button.nav-btn.papelera-btn:hover { background: #991b1b; }
 .sidebar.collapsed button.nav-btn { opacity: 0; pointer-events: none; }
 
+.sidebar button.nav-btn.logout-btn { background: #475569; margin-top: 10px; }
+.sidebar button.nav-btn.logout-btn:hover { background: #64748b; }
+
+.sidebar-usuario {
+  color: #94a3b8;
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sidebar.collapsed .sidebar-usuario { opacity: 0; }
+
 /* ── Hamburger ────────────────────────────────────────── */
 .hamburger {
   position: fixed;

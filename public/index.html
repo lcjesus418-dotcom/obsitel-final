@@ -23,6 +23,8 @@
   <button class="nav-btn" onclick="ir('delivery')">Venta delivery</button>
   <button class="nav-btn" onclick="ir('configuracion')">⚙ Configuración</button>
   <div style="flex:1;"></div>
+  <div id="usuario-actual" class="sidebar-usuario"></div>
+  <button class="nav-btn logout-btn" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
   <button class="nav-btn papelera-btn" onclick="ir('papelera')">🗑 Papelera</button>
 </div>
 
@@ -176,6 +178,10 @@
 
 </div><!-- /.main -->
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="/js/firebaseConfig.js"></script>
+<script src="/js/auth.js"></script>
 <script src="/js/formsConfig.js"></script>
 <script src="/js/googleFormsEngine.js"></script>
 <script src="/js/configApp.js"></script>

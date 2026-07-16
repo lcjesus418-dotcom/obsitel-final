@@ -295,9 +295,16 @@ async function borrarTodo(seccion) {
   renders[seccion]();
 }
 
-/* ── API helper ──────────────────────────────────────────── */
+/* ── API helper (incluye token de Firebase en cada llamada) ─ */
 async function apiFetch(method, path, body) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  const token = await obtenerTokenAuth();
+  const opts = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+    }
+  };
   if (body) opts.body = JSON.stringify(body);
   try {
     const res = await fetch(`${API}/${path}`, opts);
@@ -547,7 +554,9 @@ async function eliminarSeleccion() {
   renderPapelera();
 }
 
-/* ── Init ────────────────────────────────────────────────── */
-renderObsitel();
-renderTienda();
-renderDelivery();
+/* ── Init (llamado desde auth.js una vez confirmada la sesión) ─ */
+function iniciarApp() {
+  renderObsitel();
+  renderTienda();
+  renderDelivery();
+}

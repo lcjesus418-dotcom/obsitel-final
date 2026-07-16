@@ -1,0 +1,126 @@
+/* ════════════════════════════════════════════════════════
+   login.css  –  Estilos de la página de login
+   ════════════════════════════════════════════════════════ */
+
+.login-body {
+  margin: 0;
+  min-height: 100vh;
+  background-image: url('/assets/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
+.login-overlay {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.25);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  padding: 32px 28px;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.login-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.login-titulo {
+  font-size: 15px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 18px 0;
+}
+
+.login-card input[type="text"],
+.login-card input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  margin: 6px 0;
+  border-radius: 7px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+.login-card input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.login-btn-principal {
+  margin-top: 12px;
+}
+
+.login-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.login-separador {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.login-separador::before, .login-separador::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+.login-separador span { padding: 0 10px; }
+
+.login-btn-google {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.login-btn-google:hover { background: #f8fafc; border-color: #94a3b8; }
+
+.login-toggle {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 500;
+}
+.login-toggle:hover { text-decoration: underline; }
