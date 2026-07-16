@@ -7,17 +7,15 @@
 
 /* ── Guard de rutas: redirige según el estado de sesión ─── */
 auth.onAuthStateChanged((user) => {
-  const pathname = window.location.pathname;
-  const enPaginaLogin = pathname.endsWith('login.html');
-  const enInicio = pathname === '/' || pathname.endsWith('inicio.html');
+  const enPaginaLogin = window.location.pathname.endsWith('login.html');
 
-  if (user && (enPaginaLogin || enInicio)) {
-    // Ya hay sesión y está en login/inicio -> ir a la app
+  if (user && enPaginaLogin) {
+    // Ya hay sesión activa y está en login -> ir a la app
     window.location.href = '/index.html';
-  } else if (!user && !enPaginaLogin && !enInicio) {
+  } else if (!user && !enPaginaLogin) {
     // No hay sesión y está en la app -> ir a login
     window.location.href = '/login.html';
-  } else if (user && !enPaginaLogin && !enInicio) {
+  } else if (user && !enPaginaLogin) {
     // Sesión activa en la app -> mostrar nombre/correo y cargar datos
     const nombreEl = document.getElementById('usuario-actual');
     if (nombreEl) nombreEl.textContent = user.displayName || user.email;
