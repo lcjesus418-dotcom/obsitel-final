@@ -9,6 +9,12 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+/* ── Cuando accedes a /, sirve inicio.html (página de redirección) ── */
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/inicio.html');
+});
+
 app.use(express.static('public'));
 
 /* ── Firebase Admin (verificación de tokens) ─────────────── */
