@@ -214,7 +214,21 @@ button.accion:hover { background: #1d4ed8; }
 .restore      { color: #059669; }
 .restore:hover { background: #d1fae5; }
 
-.item-body { white-space: pre-line; padding: 8px 0; color: #334155; }
+.item-body { padding: 8px 0; color: #334155; }
+
+.item-linea {
+  position: relative;
+  padding-left: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.item-linea::before {
+  content: '•';
+  position: absolute;
+  left: 2px;
+  color: #2563eb;
+  font-weight: bold;
+}
 
 /* ── Descripción (entre header y link) ────────────────── */
 .item-descripcion {
