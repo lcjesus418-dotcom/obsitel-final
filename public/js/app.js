@@ -183,7 +183,10 @@ function crearItem(reg, texto, onDel, onEdit, seccion, voucherParaForm) {
 
   const c = document.createElement('button');
   c.className = 'copy'; c.textContent = '📋'; c.title = 'Copiar';
-  c.onclick = () => copiar(div.querySelector('.item-body').innerText, c);
+  c.onclick = () => copiar(
+  Array.from(div.querySelectorAll('.item-linea')).map(l => '• ' + l.textContent).join('\n'),
+  c
+);
 
   leftSide.appendChild(bullet);
   leftSide.appendChild(c);
