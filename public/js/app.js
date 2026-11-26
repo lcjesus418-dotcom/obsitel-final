@@ -157,7 +157,15 @@ function crearVinetaSS(reg, seccion, voucherParaForm) {
   wrap.appendChild(iconBtn);
   return wrap;
 }
-
+function renderLineas(el, texto) {
+  el.textContent = '';
+  String(texto || '').split('\n').forEach(linea => {
+    const l = document.createElement('div');
+    l.className = 'item-linea';
+    l.textContent = linea;
+    el.appendChild(l);
+  });
+}
 /* ── Crear baucher ───────────────────────────────────────── */
 function crearItem(reg, texto, onDel, onEdit, seccion, voucherParaForm) {
   const div = document.createElement('div');
@@ -219,7 +227,7 @@ function crearItem(reg, texto, onDel, onEdit, seccion, voucherParaForm) {
 
   const body = document.createElement('div');
   body.className = 'item-body';
-  body.innerText = texto;
+  renderLineas(body, texto);
 
   // Descuentos -> viñeta SS + ícono. Tienda/Delivery -> Accesorio + Promo LLAA + ícono.
   const footer = (seccion === 'obsitel')
@@ -255,7 +263,7 @@ async function renderHist(seccion, genTexto, genVoucherForm) {
       (itemDiv) => {
         const bodyEl = itemDiv.querySelector('.item-body');
         const ta = document.createElement('textarea');
-        ta.value = bodyEl.innerText;
+        renderLineas(bodyEl, ta.value);
         ta.style.cssText = 'width:100%;min-height:120px;font-size:13px;border-radius:5px;border:1px solid #94a3b8;padding:6px;resize:vertical;font-family:Arial;';
 
         const btnOk = document.createElement('button');
