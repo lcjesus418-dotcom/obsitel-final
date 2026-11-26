@@ -40,7 +40,7 @@ const OPCIONES_ASESOR_VENTA = [
   'SBU_LCARRASCOL','SBU_CMOGOLLONA','SBU_LTERRONESD','SBU_AMOGOLLONA','SBU_KALORH',
   'SBU_JJIMENEZG','SBU_YPFARFANA','SBU_JQUINDER','SBU_KCONOPUMAA','SBU_DCRUZADOM',
   'SBU_AESPINOZAH','SBU_MGODOYL','SBU_MMANTAS','SBU_BMURAYARIS','SBU_AMUNOZD',
-  'SBU_ISANCHEZT','SBU_JSILVAM','SBU_JISUIZAF','SBU_KMVERTIZM','SBU_YCHOQUEP'
+  'SBU_ISANCHEZT','SBU_JSILVAM','SBU_JISUIZAF','SBU_KMVERTIZM','SBU_YCHOQUEP','SBU_JLUCEROC'
 ];
 
 // Asesor Descuentos (Obsitel) — nombre completo
@@ -82,7 +82,7 @@ const OPCIONES_ASESOR_DESCUENTOS = [
   'Ramos Espinoza Carlos Daniel','Sanchez Trejo Israel','Silva Mendoza Jeremy',
   'Vertiz Montejo Kimberly Monica','Choque Portocarrero Yeremy Katyuska','Romero Díaz Amy Alondra',
   'Rengifo Ferreñan Cadith Aracelly','Díaz Prada Flavio Josué','Cruz Díaz Jhonatan Angel',
-  'Ibáñez Mendoza Karen Maite','Obando Quiroga Maria Alondra','Ancho Sanchez María Victoria'
+  'Ibáñez Mendoza Karen Maite','Obando Quiroga Maria Alondra','Ancho Sanchez María Victoria','Lucero Carrillo Jesus Maria'
 ];
 
 /* ── Renderizar la sección de Configuración ────────────── */
